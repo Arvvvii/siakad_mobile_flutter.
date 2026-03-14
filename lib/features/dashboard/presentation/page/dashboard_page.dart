@@ -38,7 +38,8 @@ class DashboardPage extends ConsumerWidget {
         loading: () => const LoadingWidget(),
         error: (error, stack) => CustomErrorWidget(
           message: 'Gagal memuat data: ${error.toString()}',
-          onRetry: () => ref.read(dashboardNotifierProvider.notifier).refresh(),
+          onRetry: () =>
+              ref.read(dashboardNotifierProvider.notifier).refresh(),
         ),
         data: (dashboardData) {
           return RefreshIndicator(
@@ -65,7 +66,9 @@ class DashboardPage extends ConsumerWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).primaryColor.withOpacity(0.3),
+                          color: Theme.of(context)
+                              .primaryColor
+                              .withOpacity(0.3),
                           blurRadius: 20,
                           offset: const Offset(0, 10),
                         )
@@ -74,15 +77,18 @@ class DashboardPage extends ConsumerWidget {
                     child: SafeArea(
                       bottom: false,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24, 20, 24, 32),
+                        padding:
+                            const EdgeInsets.fromLTRB(24, 20, 24, 32),
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const Text(
                                         'Selamat Datang,',
@@ -104,13 +110,17 @@ class DashboardPage extends ConsumerWidget {
                                     ],
                                   ),
                                 ),
-                                // TOMBOL PROFILE DI HEADER (BIAR BISA DIKLIK)
+
+                                /// BUTTON PROFILE
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(16),
+                                    color:
+                                        Colors.white.withOpacity(0.2),
+                                    borderRadius:
+                                        BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: Colors.white.withOpacity(0.3),
+                                      color: Colors.white
+                                          .withOpacity(0.3),
                                     ),
                                   ),
                                   child: IconButton(
@@ -120,39 +130,51 @@ class DashboardPage extends ConsumerWidget {
                                       size: 26,
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, _createRoute(const ProfilePage()));
+                                      Navigator.push(
+                                          context,
+                                          _createRoute(
+                                              const ProfilePage()));
                                     },
                                   ),
                                 )
                               ],
                             ),
                             const SizedBox(height: 20),
+
+                            /// UPDATE DATE
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding:
+                                  const EdgeInsets.symmetric(
                                 vertical: 12,
                                 horizontal: 16,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15),
-                                borderRadius: BorderRadius.circular(16),
+                                color:
+                                    Colors.white.withOpacity(0.15),
+                                borderRadius:
+                                    BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color:
+                                      Colors.white.withOpacity(0.2),
                                 ),
                               ),
                               child: Row(
                                 children: [
                                   Icon(
                                     Icons.calendar_today_rounded,
-                                    color: Colors.white.withOpacity(0.8),
+                                    color: Colors.white
+                                        .withOpacity(0.8),
                                     size: 18,
                                   ),
                                   const SizedBox(width: 12),
                                   Text(
                                     'Update: ${_formatDate(dashboardData.lastUpdate)}',
                                     style: TextStyle(
-                                      color: Colors.white.withOpacity(0.9),
+                                      color: Colors.white
+                                          .withOpacity(0.9),
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight:
+                                          FontWeight.w500,
                                     ),
                                   )
                                 ],
@@ -165,15 +187,17 @@ class DashboardPage extends ConsumerWidget {
                   ),
                 ),
 
-                /// STATISTIC TITLE
+                /// TITLE STATISTIK
                 SliverPadding(
                   padding: const EdgeInsets.all(24),
                   sliver: SliverToBoxAdapter(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
                               'Statistik',
@@ -185,56 +209,88 @@ class DashboardPage extends ConsumerWidget {
                             ),
                             TextButton.icon(
                               onPressed: () {
-                                ref.read(dashboardNotifierProvider.notifier).refresh();
+                                ref
+                                    .read(
+                                        dashboardNotifierProvider
+                                            .notifier)
+                                    .refresh();
                               },
-                              icon: const Icon(Icons.refresh_rounded, size: 18),
+                              icon: const Icon(
+                                  Icons.refresh_rounded,
+                                  size: 18),
                               label: const Text('Refresh'),
                             ),
                           ],
                         ),
                         const SizedBox(height: 20),
 
-                        /// GRID STAT (LOGIKA NAVIGASI DI SINI)
+                        /// GRID STAT CARD
                         GridView.builder(
                           shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          physics:
+                              const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 16,
                             crossAxisSpacing: 16,
                             childAspectRatio: 1.1,
                           ),
-                          itemCount: dashboardData.stats.length,
+                          itemCount:
+                              dashboardData.stats.length,
                           itemBuilder: (context, index) {
-                            final stat = dashboardData.stats[index];
-                            return StatCard(
+                            final stat =
+                                dashboardData.stats[index];
+
+                            return ModernStatCard(
                               stats: stat,
-                              icon: _getIconForStat(stat.title),
-                              gradientColors: AppConstants.dashboardGradients[
-                                  index % AppConstants.dashboardGradients.length],
-                              isSelected: selectedIndex == index,
+                              icon: _getIconForStat(
+                                  stat.title),
+                              gradientColors: AppConstants
+                                      .dashboardGradients[
+                                  index %
+                                      AppConstants
+                                          .dashboardGradients
+                                          .length],
+                              isSelected:
+                                  selectedIndex == index,
+
                               onTap: () {
-                                ref.read(selectedStatIndexProvider.notifier).state = index;
+                                ref
+                                    .read(
+                                        selectedStatIndexProvider
+                                            .notifier)
+                                    .state = index;
 
                                 Widget? targetPage;
+
                                 switch (stat.title) {
                                   case 'Total Mahasiswa':
-                                    targetPage = const MahasiswaPage();
+                                    targetPage =
+                                        const MahasiswaPage();
                                     break;
+
                                   case 'Mahasiswa Aktif':
-                                    targetPage = const MahasiswaAktifPage();
+                                    targetPage =
+                                        const MahasiswaAktifPage();
                                     break;
+
                                   case 'Dosen':
-                                    targetPage = const DosenPage();
+                                    targetPage =
+                                        const DosenPage();
                                     break;
+
                                   case 'Mahasiswa Lulus':
-                                    // Bisa diarahkan ke Profile atau halaman Lulus khusus
-                                    targetPage = const ProfilePage();
+                                    targetPage =
+                                        const ProfilePage();
                                     break;
                                 }
 
                                 if (targetPage != null) {
-                                  Navigator.push(context, _createRoute(targetPage));
+                                  Navigator.push(
+                                      context,
+                                      _createRoute(
+                                          targetPage));
                                 }
                               },
                             );
@@ -244,7 +300,9 @@ class DashboardPage extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SliverPadding(padding: EdgeInsets.only(bottom: 24)),
+
+                const SliverPadding(
+                    padding: EdgeInsets.only(bottom: 24)),
               ],
             ),
           );
@@ -253,30 +311,53 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 
-  /// ANIMATION ROUTE (SLIDE KANAN KE KIRI)
+  /// ANIMASI NAVIGASI
   Route _createRoute(Widget page) {
     return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      pageBuilder:
+          (context, animation, secondaryAnimation) =>
+              page,
+      transitionsBuilder:
+          (context, animation, secondaryAnimation,
+              child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
         const curve = Curves.easeInOutCubic;
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var offsetAnimation = animation.drive(tween);
-        return SlideTransition(position: offsetAnimation, child: child);
+
+        var tween = Tween(begin: begin, end: end)
+            .chain(CurveTween(curve: curve));
+
+        var offsetAnimation =
+            animation.drive(tween);
+
+        return SlideTransition(
+            position: offsetAnimation, child: child);
       },
-      transitionDuration: const Duration(milliseconds: 400),
+      transitionDuration:
+          const Duration(milliseconds: 400),
     );
   }
 
-  /// FORMAT DATE
+  /// FORMAT TANGGAL
   String _formatDate(String date) {
     try {
       final months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'Mei',
+        'Jun',
+        'Jul',
+        'Agu',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Des'
       ];
+
       final dateTime = DateTime.parse(date);
+
       return '${dateTime.day} ${months[dateTime.month - 1]} ${dateTime.year}, '
           '${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
     } catch (e) {

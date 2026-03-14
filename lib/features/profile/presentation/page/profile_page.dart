@@ -19,17 +19,17 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Text('Arvian CB', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          const Text('NIM: 224101000xx', style: TextStyle(color: Colors.grey)),
+          const Text('NIM: 434241003', style: TextStyle(color: Colors.grey)),
           const Divider(height: 40, indent: 20, endIndent: 20),
           ListTile(
             leading: const Icon(Icons.school),
             title: const Text('Jurusan'),
-            subtitle: const Text('D4 Teknologi Informasi'),
+            subtitle: const Text('D4 Teknik Informatika'),
           ),
           ListTile(
             leading: const Icon(Icons.email),
             title: const Text('Email'),
-            subtitle: const Text('arvian@student.unair.ac.id'),
+            subtitle: const Text('arvian@vokasi.unair.ac.id'),
           ),
           const Spacer(),
           Padding(

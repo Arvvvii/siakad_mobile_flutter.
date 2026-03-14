@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../data/models/dosen_model.dart';
+import '../../data/models/mahasiswa_model.dart';
 
-class ModernDosenCard extends StatefulWidget {
-  final DosenModel dosen;
+class ModernMahasiswaCard extends StatefulWidget {
+  final MahasiswaModel mahasiswa;
   final VoidCallback? onTap;
   final List<Color>? gradientColors;
 
-  const ModernDosenCard({
-    Key? key,
-    required this.dosen,
+  const ModernMahasiswaCard({
+    super.key,
+    required this.mahasiswa,
     this.onTap,
     this.gradientColors,
-  }) : super(key: key);
+  });
 
   @override
-  State<ModernDosenCard> createState() => _ModernDosenCardState();
+  State<ModernMahasiswaCard> createState() => _ModernMahasiswaCardState();
 }
 
-class _ModernDosenCardState extends State<ModernDosenCard>
+class _ModernMahasiswaCardState extends State<ModernMahasiswaCard>
     with SingleTickerProviderStateMixin {
 
   late AnimationController _controller;
@@ -97,7 +97,6 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                 Container(
                   width: 55,
                   height: 55,
-
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     shape: BoxShape.circle,
@@ -105,10 +104,9 @@ class _ModernDosenCardState extends State<ModernDosenCard>
 
                   child: Center(
                     child: Text(
-                      widget.dosen.name.isNotEmpty
-                          ? widget.dosen.name[0].toUpperCase()
+                      widget.mahasiswa.name.isNotEmpty
+                          ? widget.mahasiswa.name[0].toUpperCase()
                           : '?',
-
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -120,15 +118,14 @@ class _ModernDosenCardState extends State<ModernDosenCard>
 
                 const SizedBox(width: 16),
 
-                /// INFORMASI DOSEN
+                /// INFORMASI
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      /// NAME
                       Text(
-                        widget.dosen.name,
+                        widget.mahasiswa.name,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -136,38 +133,24 @@ class _ModernDosenCardState extends State<ModernDosenCard>
                         ),
                       ),
 
-                      /// USERNAME
                       Text(
-                        '@${widget.dosen.username}',
+                        widget.mahasiswa.email,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
                           fontSize: 14,
                         ),
                       ),
 
-                      const Divider(color: Colors.white24, height: 20),
+                      const Divider(color: Colors.white24),
 
-                      /// EMAIL
-                      _buildInfoDetail(
-                        Icons.email_outlined,
-                        widget.dosen.email,
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      /// ADDRESS
-                      _buildInfoDetail(
-                        Icons.location_on_outlined,
-                        '${widget.dosen.address.city}, ${widget.dosen.address.street}',
+                      Text(
+                        widget.mahasiswa.body,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white70),
                       ),
                     ],
                   ),
-                ),
-
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  color: Colors.white54,
-                  size: 16,
                 ),
               ],
             ),
@@ -176,80 +159,37 @@ class _ModernDosenCardState extends State<ModernDosenCard>
       ),
     );
   }
-
-  Widget _buildInfoDetail(IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(icon, size: 14, color: Colors.white70),
-        const SizedBox(width: 6),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(color: Colors.white70, fontSize: 13),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
-  }
 }
 
-class DosenListView extends StatelessWidget {
+class MahasiswaListView extends StatelessWidget {
 
-  final List<DosenModel> dosenList;
+  final List<MahasiswaModel> mahasiswaList;
   final VoidCallback onRefresh;
-  final bool useModernCard;
 
-  const DosenListView({
-    Key? key,
-    required this.dosenList,
+  const MahasiswaListView({
+    super.key,
+    required this.mahasiswaList,
     required this.onRefresh,
-    this.useModernCard = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
 
-    if (dosenList.isEmpty) {
-      return RefreshIndicator(
-        onRefresh: () async => onRefresh(),
-        child: ListView(
-          children: const [
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 50),
-                child: Text('Data dosen tidak ditemukan'),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return RefreshIndicator(
       onRefresh: () async => onRefresh(),
+
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        itemCount: dosenList.length,
+        itemCount: mahasiswaList.length,
 
         itemBuilder: (context, index) {
 
-          final dosen = dosenList[index];
+          final mahasiswa = mahasiswaList[index];
 
-      if (useModernCard) {
-        return ModernDosenCard(
-          dosen: dosen,
-          gradientColors: AppConstants.dashboardGradients[
-              index % AppConstants.dashboardGradients.length],
-          onTap: () {
-            debugPrint("Detail ${dosen.name}");
-          },
-        );
-      }
-
-          return ListTile(
-            title: Text(dosen.name),
-            subtitle: Text(dosen.email),
+          return ModernMahasiswaCard(
+            mahasiswa: mahasiswa,
+            gradientColors: AppConstants.dashboardGradients[
+                index % AppConstants.dashboardGradients.length],
           );
         },
       ),
